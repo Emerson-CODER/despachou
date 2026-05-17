@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Despachou — Prep Center em Campinas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:    #FFFFFF;
+      --gray-50:  #F8FAF7;
+      --txt:      #0D1B0F;
+      --txt-2:    #4A6450;
+      --txt-3:    #8AA08D;
+      --g900:     #1A380B;
+      --g800:     #2B5716;
+      --g600:     #3C7820;
+      --g400:     #6FB643;
+      --g100:     #D3ECC3;
+      --g50:      #ECF5E6;
+      --border:   #E2EFD9;
+      --border-m: #C8DFC0;
+      --red-bg:   #FEF2F2;
+      --red-txt:  #991B1B;
+      --red-brd:  #FECACA;
+      --amb-bg:   #FFFBEB;
+      --amb-txt:  #92400E;
+      --amb-brd:  #FDE68A;
+      --font:     'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--txt); -webkit-font-smoothing: antialiased; line-height: 1.5; }
+    a { text-decoration: none; color: inherit; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 80px; }
+
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font); font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: all .2s ease; white-space: nowrap; }
+    .btn:focus-visible { outline: 2px solid var(--g800); outline-offset: 2px; }
+
+    .btn-primary { background: var(--g800); color: #fff; border-radius: 10px; padding: 13px 24px; font-size: 15px; }
+    .btn-primary:hover { background: var(--g900); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(43,87,22,.28); }
+    .btn-primary:active { transform: none; box-shadow: none; }
+
+    .btn-secondary { background: transparent; color: var(--txt-2); border: 1.5px solid var(--border-m); border-radius: 10px; padding: 12px 24px; font-size: 15px; }
+    .btn-secondary:hover { border-color: var(--g600); color: var(--txt); background: var(--g50); }
+
+    .btn-lg { padding: 16px 32px; font-size: 17px; border-radius: 12px; }
+
+    .btn-white { background: #fff; color: var(--g800); border-radius: 10px; padding: 14px 28px; font-size: 16px; font-weight: 700; }
+    .btn-white:hover { background: var(--g50); transform: translateY(-1px); }
+
+    .btn-ghost-white { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.35); border-radius: 10px; padding: 14px 28px; font-size: 16px; }
+    .btn-ghost-white:hover { border-color: rgba(255,255,255,.7); background: rgba(255,255,255,.1); }
+
+    /* NAV */
+    .nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 32px; }
+    .nav-logo { font-size: 22px; font-weight: 800; color: var(--g800); letter-spacing: -0.03em; flex-shrink: 0; }
+    .nav-logo span { color: var(--g400); }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a { font-size: 15px; font-weight: 500; color: var(--txt-2); transition: color .2s; }
+    .nav-links a:hover { color: var(--txt); }
+
+    /* HERO */
+    .hero { padding: 88px 0 112px; }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--g800); background: var(--g50); border: 1px solid var(--g100); padding: 6px 14px; border-radius: 9999px; margin-bottom: 32px; }
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--g400); box-shadow: 0 0 0 3px rgba(111,182,67,.2); flex-shrink: 0; }
+
+    .hero-h1 { font-size: 68px; font-weight: 800; line-height: 1.05; letter-spacing: -0.04em; color: var(--txt); margin-bottom: 24px; }
+    .hero-h1 .hl { color: var(--g800); text-decoration: underline; text-decoration-color: var(--g400); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+
+    .hero-sub { font-size: 18px; line-height: 1.65; color: var(--txt-2); margin-bottom: 40px; max-width: 480px; }
+
+    .hero-actions { display: flex; gap: 12px; margin-bottom: 48px; flex-wrap: wrap; }
+
+    .hero-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 24px; }
+
+    .promises { display: flex; flex-direction: column; gap: 12px; }
+    .promise { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--txt-2); }
+    .promise-ico { width: 24px; height: 24px; flex-shrink: 0; background: var(--g50); border: 1px solid var(--g100); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .promise-ico svg { width: 12px; height: 12px; stroke: var(--g600); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .promise strong { color: var(--txt); font-weight: 600; }
+
+    /* HERO PANEL */
+    .hero-right { position: relative; padding-bottom: 28px; }
+    .hero-panel { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 24px; box-shadow: 0 8px 40px rgba(13,27,15,.1), 0 1px 3px rgba(13,27,15,.06); }
+
+    .panel-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .panel-title { font-size: 14px; font-weight: 700; color: var(--txt); }
+    .panel-loc { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--txt-3); }
+    .panel-loc svg { width: 12px; height: 12px; stroke: var(--g600); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .panel-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; }
+    .pstat { background: var(--gray-50); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; text-align: center; }
+    .pstat-n { font-size: 24px; font-weight: 800; color: var(--g800); line-height: 1; }
+    .pstat-l { font-size: 11px; color: var(--txt-3); margin-top: 3px; font-weight: 500; }
+
+    .panel-sep { border: none; border-top: 1px solid var(--border); margin-bottom: 16px; }
+    .panel-sub { font-size: 11px; font-weight: 700; color: var(--txt-3); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px; }
+
+    .orders { display: flex; flex-direction: column; gap: 8px; }
+    .order { display: flex; align-items: center; gap: 12px; background: var(--gray-50); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; transition: border-color .2s; }
+    .order:hover { border-color: var(--border-m); }
+    .order-ico { width: 36px; height: 36px; flex-shrink: 0; background: var(--g50); border: 1px solid var(--g100); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .order-ico svg { width: 16px; height: 16px; stroke: var(--g800); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .order-info { flex: 1; min-width: 0; }
+    .order-name { font-size: 13px; font-weight: 600; color: var(--txt); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .order-meta { font-size: 11px; color: var(--txt-3); margin-top: 1px; }
+    .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 9999px; flex-shrink: 0; }
+    .badge-g { background: var(--g50); color: var(--g800); border: 1px solid var(--g100); }
+    .badge-a { background: var(--amb-bg); color: var(--amb-txt); border: 1px solid var(--amb-brd); }
+
+    .float-card { position: absolute; bottom: 0; left: -16px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; box-shadow: 0 12px 40px rgba(13,27,15,.12); display: flex; align-items: center; gap: 10px; }
+    .float-ico { width: 36px; height: 36px; flex-shrink: 0; background: var(--g50); border: 1px solid var(--g100); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .float-ico svg { width: 16px; height: 16px; stroke: var(--g800); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .float-t { font-size: 13px; font-weight: 700; color: var(--txt); }
+    .float-s { font-size: 11px; color: var(--txt-3); margin-top: 1px; }
+
+    /* LOGOS */
+    .logos { padding: 40px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .logos-lbl { text-align: center; font-size: 13px; color: var(--txt-3); font-weight: 500; margin-bottom: 20px; }
+    .logos-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; }
+    .logos-sep { text-align: center; font-size: 12px; color: var(--txt-3); margin: 14px 0; display: flex; align-items: center; gap: 14px; max-width: 540px; margin-left: auto; margin-right: auto; }
+    .logos-sep::before, .logos-sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .chip { display: flex; align-items: center; gap: 8px; background: var(--gray-50); border: 1px solid var(--border); border-radius: 10px; padding: 8px 16px; font-size: 14px; font-weight: 600; color: var(--txt-2); }
+    .chip-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* SEÇÕES */
+    section { padding: 96px 0; }
+    .bg-alt { background: var(--gray-50); }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--g600); margin-bottom: 14px; }
+    .s-h2 { font-size: 44px; font-weight: 800; line-height: 1.12; letter-spacing: -0.03em; color: var(--txt); margin-bottom: 16px; }
+    .s-sub { font-size: 18px; color: var(--txt-2); line-height: 1.6; max-width: 560px; margin-bottom: 56px; }
+
+    /* COMO FUNCIONA */
+    .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; position: relative; }
+    .steps::before { content: ''; position: absolute; top: 32px; left: calc(12.5% + 16px); right: calc(12.5% + 16px); height: 0; border-top: 2px dashed var(--border-m); }
+    .step { padding: 0 20px; }
+    .step-n { width: 64px; height: 64px; border-radius: 16px; background: var(--g50); border: 2px solid var(--g100); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; color: var(--g800); margin-bottom: 20px; position: relative; z-index: 1; }
+    .step-t { font-size: 17px; font-weight: 700; color: var(--txt); margin-bottom: 8px; }
+    .step-d { font-size: 15px; color: var(--txt-2); line-height: 1.55; }
+
+    /* COM vs SEM */
+    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .compare-col { border-radius: 16px; padding: 32px; border: 1px solid; }
+    .col-yes { background: var(--g50); border-color: var(--g100); }
+    .col-no  { background: var(--red-bg); border-color: var(--red-brd); }
+    .col-head { font-size: 18px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+    .col-yes .col-head { color: var(--g800); }
+    .col-no  .col-head { color: var(--red-txt); }
+    .col-mark { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; flex-shrink: 0; }
+    .col-yes .col-mark { background: var(--g800); color: #fff; }
+    .col-no  .col-mark { background: var(--red-txt); color: #fff; }
+    .col-item { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; padding: 11px 0; border-bottom: 1px solid; line-height: 1.45; }
+    .col-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .col-yes .col-item { color: var(--txt); border-color: var(--g100); }
+    .col-no  .col-item { color: var(--txt-2); border-color: var(--red-brd); }
+    .item-mark { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
+    .col-yes .item-mark { background: var(--g800); color: #fff; }
+    .col-no  .item-mark { background: #DC2626; color: #fff; }
+
+    /* SERVIÇOS */
+    .svc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .svc-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: border-color .2s, box-shadow .2s; }
+    .svc-card:hover { border-color: var(--border-m); box-shadow: 0 4px 20px rgba(13,27,15,.07); }
+    .svc-ico { width: 48px; height: 48px; border-radius: 12px; background: var(--g50); border: 1px solid var(--g100); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .svc-ico svg { width: 22px; height: 22px; stroke: var(--g800); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .svc-t { font-size: 17px; font-weight: 700; color: var(--txt); margin-bottom: 8px; }
+    .svc-d { font-size: 15px; color: var(--txt-2); line-height: 1.55; }
+
+    /* PREÇOS */
+    .pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 800px; margin: 0 auto; }
+    .price-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 20px; padding: 36px; }
+    .price-card.feat { border-color: var(--g800); position: relative; }
+    .price-pill { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--g800); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .04em; padding: 4px 16px; border-radius: 9999px; white-space: nowrap; }
+    .price-lbl { font-size: 12px; font-weight: 600; color: var(--txt-3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+    .price-name { font-size: 22px; font-weight: 800; color: var(--txt); margin-bottom: 6px; }
+    .price-val { font-size: 30px; font-weight: 800; color: var(--g800); line-height: 1; margin-bottom: 24px; }
+    .price-val small { font-size: 15px; font-weight: 400; color: var(--txt-3); }
+    .price-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .price-item { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--txt-2); }
+    .price-item svg { width: 18px; height: 18px; stroke: var(--g600); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .pricing-cta { text-align: center; margin-top: 40px; }
+    .pricing-note { font-size: 14px; color: var(--txt-3); margin-top: 14px; }
+
+    /* FAQ */
+    .faq-wrap { max-width: 760px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:first-child { border-top: 1px solid var(--border); }
+    .faq-btn { width: 100%; background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 22px 0; text-align: left; gap: 16px; font-family: var(--font); }
+    .faq-q { font-size: 17px; font-weight: 600; color: var(--txt); }
+    .faq-ic { width: 24px; height: 24px; flex-shrink: 0; transition: transform .25s ease; }
+    .faq-ic svg { width: 24px; height: 24px; stroke: var(--txt-3); fill: none; stroke-width: 2; stroke-linecap: round; }
+    .faq-item.open .faq-ic { transform: rotate(45deg); }
+    .faq-ans { font-size: 16px; color: var(--txt-2); line-height: 1.65; max-height: 0; overflow: hidden; transition: max-height .3s ease, padding-bottom .3s ease; }
+    .faq-item.open .faq-ans { max-height: 240px; padding-bottom: 22px; }
+
+    /* DEPOIMENTOS */
+    .testi { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .testi-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+    .stars { color: #F59E0B; letter-spacing: 2px; margin-bottom: 14px; font-size: 15px; }
+    .testi-txt { font-size: 15px; color: var(--txt-2); line-height: 1.65; font-style: italic; margin-bottom: 20px; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--g50); border: 1px solid var(--g100); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--g800); flex-shrink: 0; }
+    .author-name { font-size: 14px; font-weight: 700; color: var(--txt); }
+    .author-role { font-size: 13px; color: var(--txt-3); }
+
+    /* CTA FINAL */
+    .cta-final { background: var(--g800); padding: 96px 0; }
+    .cta-inner { text-align: center; max-width: 640px; margin: 0 auto; }
+    .cta-h2 { font-size: 44px; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; color: #fff; margin-bottom: 16px; }
+    .cta-sub { font-size: 18px; color: rgba(255,255,255,.72); line-height: 1.6; margin-bottom: 40px; }
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* FOOTER */
+    .footer { border-top: 1px solid var(--border); padding: 48px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+    .footer-logo { font-size: 20px; font-weight: 800; color: var(--g800); letter-spacing: -0.03em; }
+    .footer-logo span { color: var(--g400); }
+    .footer-tag { font-size: 14px; color: var(--txt-3); margin-top: 4px; }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a { font-size: 14px; color: var(--txt-3); transition: color .2s; }
+    .footer-links a:hover { color: var(--txt); }
+    .footer-copy { font-size: 13px; color: var(--txt-3); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .container { padding: 0 40px; }
+      .hero-h1 { font-size: 52px; }
+      .s-h2 { font-size: 36px; }
+      .steps { grid-template-columns: repeat(2,1fr); gap: 32px; }
+      .steps::before { display: none; }
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 24px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-h1 { font-size: 44px; }
+      .hero-right { display: none; }
+      .nav-links { display: none; }
+      .compare { grid-template-columns: 1fr; }
+      .svc-grid { grid-template-columns: 1fr; }
+      .pricing { grid-template-columns: 1fr; max-width: 400px; }
+      .testi { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .cta-h2 { font-size: 32px; }
+      .s-h2 { font-size: 30px; }
+      .footer-links { display: none; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Despachou<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#precos">Preços</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <a href="https://wa.me/5519999999999" target="_blank" rel="noopener" class="btn btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12 19.79 19.79 0 01.91 3.18 2 2 0 012.88 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.69a16 16 0 006.29 6.29l1.05-1.05a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        Falar no WhatsApp
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge"><div class="badge-dot"></div>Prep center · Campinas, SP</div>
+        <h1 class="hero-h1">Seu pedido<br><span class="hl">embalado e enviado.</span><br>Sem complicação.</h1>
+        <p class="hero-sub">A Despachou recebe, prepara e envia seus produtos com a identidade da sua marca. Você foca em vender — a gente faz o resto.</p>
+        <div class="hero-actions">
+          <a href="https://wa.me/5519999999999" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12 19.79 19.79 0 01.91 3.18 2 2 0 012.88 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.69a16 16 0 006.29 6.29l1.05-1.05a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            Falar no WhatsApp
+          </a>
+          <a href="#como-funciona" class="btn btn-secondary btn-lg">Como funciona <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+        <hr class="hero-divider">
+        <div class="promises">
+          <div class="promise"><div class="promise-ico"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span><strong>Sem mensalidade</strong> — pague só pelo que usar</span></div>
+          <div class="promise"><div class="promise-ico"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span><strong>Sem contrato mínimo</strong> — comece quando quiser</span></div>
+          <div class="promise"><div class="promise-ico"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span><strong>Embalagem com sua marca</strong> — unboxing experience real</span></div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-panel">
+          <div class="panel-top">
+            <span class="panel-title">Painel de pedidos</span>
+            <span class="panel-loc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Campinas, SP</span>
+          </div>
+          <div class="panel-stats">
+            <div class="pstat"><div class="pstat-n">24h</div><div class="pstat-l">Prazo envio</div></div>
+            <div class="pstat"><div class="pstat-n">3</div><div class="pstat-l">Transportadoras</div></div>
+            <div class="pstat"><div class="pstat-n">100%</div><div class="pstat-l">Rastreado</div></div>
+          </div>
+          <hr class="panel-sep">
+          <div class="panel-sub">Pedidos de hoje</div>
+          <div class="orders">
+            <div class="order">
+              <div class="order-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+              <div class="order-info"><div class="order-name">Kit Skincare Presente</div><div class="order-meta">Shopify · Jadlog</div></div>
+              <span class="badge badge-g">Despachado ✓</span>
+            </div>
+            <div class="order">
+              <div class="order-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+              <div class="order-info"><div class="order-name">Camiseta Oversized – P</div><div class="order-meta">Nuvemshop · Correios</div></div>
+              <span class="badge badge-g">Despachado ✓</span>
+            </div>
+            <div class="order">
+              <div class="order-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+              <div class="order-info"><div class="order-name">Mochila Impermeável</div><div class="order-meta">Bling · Melhor Envio</div></div>
+              <span class="badge badge-a">Embalando...</span>
+            </div>
+          </div>
+        </div>
+        <div class="float-card" aria-hidden="true">
+          <div class="float-ico"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+          <div><div class="float-t">Enviado agora</div><div class="float-s">Jadlog · Campinas → São Paulo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS -->
+<div class="logos">
+  <div class="container">
+    <p class="logos-lbl">Enviamos pelos principais transportadores e integramos com as plataformas que você já usa</p>
+    <div class="logos-row">
+      <div class="chip"><div class="chip-dot" style="background:#003082"></div>Correios</div>
+      <div class="chip"><div class="chip-dot" style="background:#E8000D"></div>Jadlog</div>
+      <div class="chip"><div class="chip-dot" style="background:#2E7D32"></div>Melhor Envio</div>
+    </div>
+    <div class="logos-sep">integrações</div>
+    <div class="logos-row">
+      <div class="chip"><div class="chip-dot" style="background:#96BF48"></div>Shopify</div>
+      <div class="chip"><div class="chip-dot" style="background:#0080FF"></div>Nuvemshop</div>
+      <div class="chip"><div class="chip-dot" style="background:#F77F00"></div>Bling</div>
+      <div class="chip"><div class="chip-dot" style="background:#FFE600;border:1px solid #ccc"></div>Mercado Livre</div>
+      <div class="chip" style="opacity:.55"><div class="chip-dot" style="background:#8AA08D"></div>+ mais em breve</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMO FUNCIONA -->
+<section id="como-funciona">
+  <div class="container">
+    <p class="eyebrow">Como funciona</p>
+    <h2 class="s-h2">Do estoque ao cliente<br>final em 4 passos</h2>
+    <p class="s-sub">Você não precisa tocar no produto. A Despachou cuida de tudo.</p>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><h3 class="step-t">Você envia o estoque</h3><p class="step-d">Seu fornecedor envia direto para a Despachou em Campinas. Sem você precisar receber nada em casa.</p></div>
+      <div class="step"><div class="step-n">2</div><h3 class="step-t">Recebemos e conferimos</h3><p class="step-d">Verificamos quantidade e qualidade de cada item e registramos a entrada no sistema.</p></div>
+      <div class="step"><div class="step-n">3</div><h3 class="step-t">Embalamos com sua marca</h3><p class="step-d">Caixa, fita, cartão de agradecimento — identidade da sua loja em cada pedido enviado.</p></div>
+      <div class="step"><div class="step-n">4</div><h3 class="step-t">Despachamos</h3><p class="step-d">Enviamos pela transportadora escolhida com rastreio automático para você e o cliente.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COM vs SEM -->
+<section class="bg-alt">
+  <div class="container">
+    <p class="eyebrow">A diferença</p>
+    <h2 class="s-h2" style="margin-bottom:40px">Com a Despachou vs.<br>sem a Despachou</h2>
+    <div class="compare">
+      <div class="compare-col col-yes">
+        <div class="col-head"><div class="col-mark">✓</div>Com a Despachou</div>
+        <div class="col-item"><span class="item-mark">✓</span>Pedidos embalados e enviados no mesmo dia</div>
+        <div class="col-item"><span class="item-mark">✓</span>Embalagem com identidade da sua marca</div>
+        <div class="col-item"><span class="item-mark">✓</span>Foco 100% em vender e crescer</div>
+        <div class="col-item"><span class="item-mark">✓</span>Rastreio automático para você e o cliente</div>
+        <div class="col-item"><span class="item-mark">✓</span>Sem mensalidade, sem contrato mínimo</div>
+      </div>
+      <div class="compare-col col-no">
+        <div class="col-head"><div class="col-mark">✗</div>Sem a Despachou</div>
+        <div class="col-item"><span class="item-mark">✗</span>Você embalando produto na sala de casa</div>
+        <div class="col-item"><span class="item-mark">✗</span>Caixa genérica sem personalização nenhuma</div>
+        <div class="col-item"><span class="item-mark">✗</span>Metade do dia resolvendo logística</div>
+        <div class="col-item"><span class="item-mark">✗</span>Clientes perguntando "cadê meu pedido?"</div>
+        <div class="col-item"><span class="item-mark">✗</span>Custos fixos mesmo em meses fracos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="container">
+    <p class="eyebrow">Serviços</p>
+    <h2 class="s-h2">O que a Despachou<br>faz por você</h2>
+    <p class="s-sub">Cada detalhe cuidado para que seu cliente receba uma experiência completa.</p>
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+        <h3 class="svc-t">Recebimento e conferência</h3>
+        <p class="svc-d">Recebemos do seu fornecedor e conferimos quantidade e qualidade antes de armazenar.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg></div>
+        <h3 class="svc-t">Embalagem personalizada</h3>
+        <p class="svc-d">Embalamos com a identidade da sua marca: caixa, fita adesiva, cartão de agradecimento.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <h3 class="svc-t">Etiquetagem</h3>
+        <p class="svc-d">Geramos e colamos etiquetas no padrão de cada transportadora. Sem erro, sem retrabalho.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <h3 class="svc-t">Expedição rastreada</h3>
+        <p class="svc-d">Enviamos pelos principais transportadores com rastreio automático para você e seu cliente.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h3 class="svc-t">Armazenagem</h3>
+        <p class="svc-d">Guardamos seu estoque com segurança e organização em nossa unidade em Campinas.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></div>
+        <h3 class="svc-t">Gestão de devoluções</h3>
+        <p class="svc-d">Recebemos e processamos trocas e devoluções, mantendo seu estoque atualizado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREÇOS -->
+<section id="precos" class="bg-alt">
+  <div class="container" style="text-align:center">
+    <p class="eyebrow">Preços</p>
+    <h2 class="s-h2" style="max-width:none">Simples, transparente,<br>sem surpresas</h2>
+    <p class="s-sub" style="margin:0 auto 56px">Sem mensalidade. Você paga só pelo que usar.</p>
+    <div class="pricing">
+      <div class="price-card">
+        <div class="price-lbl">Por pedido</div>
+        <div class="price-name">Expedição Padrão</div>
+        <div class="price-val">Consulte <small>/ pedido</small></div>
+        <ul class="price-list">
+          <li class="price-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Etiquetagem inclusa</li>
+          <li class="price-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Rastreio automático</li>
+          <li class="price-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Embalagem padrão</li>
+        </ul>
+      </div>
+      <div class="price-card feat">
+        <div class="price-pill">Mais escolhido</div>
+        <div class="price-lbl">Por pedido</div>
+        <div class="price-name">White Label</div>
+        <div class="price-val">Consulte <small>/ pedido</small></div>
+        <ul class="price-list">
+          <li class="price-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Embalagem com sua marca</li>
+          <li class="price-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Cartão personalizado</li>
+          <li class="price-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Fotos do produto</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pricing-cta">
+      <a href="https://wa.me/5519999999999" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12 19.79 19.79 0 01.91 3.18 2 2 0 012.88 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.69a16 16 0 006.29 6.29l1.05-1.05a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        Solicitar orçamento no WhatsApp
+      </a>
+      <p class="pricing-note">Volumes maiores têm condições especiais. Fale com a gente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container" style="text-align:center">
+    <p class="eyebrow">Dúvidas</p>
+    <h2 class="s-h2" style="max-width:none;margin-bottom:56px">Perguntas frequentes</h2>
+    <div class="faq-wrap" style="text-align:left">
+      <div class="faq-item">
+        <button class="faq-btn" aria-expanded="false"><span class="faq-q">Preciso ter muito volume para contratar?</span><span class="faq-ic"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+        <div class="faq-ans">Não. Atendemos desde quem está começando. Não há pedido mínimo — você usa e paga conforme sua operação crescer.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" aria-expanded="false"><span class="faq-q">Meu produto fica seguro com vocês?</span><span class="faq-ic"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+        <div class="faq-ans">Sim. Nossa unidade em Campinas tem controle de acesso, inventário registrado e equipe treinada. Você acompanha cada movimentação do seu estoque.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" aria-expanded="false"><span class="faq-q">Como funciona a integração com Shopify e Nuvemshop?</span><span class="faq-ic"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+        <div class="faq-ans">Hoje o processo é assistido pela nossa equipe. A integração automática via API está em desenvolvimento e será disponibilizada em breve para Shopify, Nuvemshop e Bling.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" aria-expanded="false"><span class="faq-q">Qual o prazo médio de envio após o pedido?</span><span class="faq-ic"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+        <div class="faq-ans">Pedidos recebidos até o horário de corte são despachados no mesmo dia. A entrega ao cliente final depende do destino e da transportadora escolhida.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" aria-expanded="false"><span class="faq-q">Vocês fazem embalagem com a minha marca?</span><span class="faq-ic"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+        <div class="faq-ans">Sim, é um dos nossos principais diferenciais. Você nos envia suas caixas, fitas ou cartões — a gente embala com a identidade da sua loja em cada pedido.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="bg-alt">
+  <div class="container" style="text-align:center">
+    <p class="eyebrow">Depoimentos</p>
+    <h2 class="s-h2" style="max-width:none;margin-bottom:56px">Quem já despachou com a gente</h2>
+    <div class="testi">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-txt">"Finalmente um prep center que entende o dropshipping. Meus clientes recebem com a embalagem da minha marca — faz toda a diferença no pós-venda."</p>
+        <div class="testi-author"><div class="avatar">CM</div><div><div class="author-name">Carlos M.</div><div class="author-role">Loja de moda · Shopify</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-txt">"Reduzi meu prazo de envio pela metade. O suporte via WhatsApp responde rápido e consigo acompanhar tudo em tempo real."</p>
+        <div class="testi-author"><div class="avatar">AP</div><div><div class="author-name">Ana P.</div><div class="author-role">E-commerce de cosméticos · Nuvemshop</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-txt">"Passei a focar só em marketing e produto. A Despachou cuida do resto — e bem feito. Não consigo imaginar operar sem eles."</p>
+        <div class="testi-author"><div class="avatar">RS</div><div><div class="author-name">Rafael S.</div><div class="author-role">Dropshipping · Bling</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="container">
+    <div class="cta-inner">
+      <h2 class="cta-h2">Pronto para parar de se preocupar com logística?</h2>
+      <p class="cta-sub">Fale com a gente agora. Sem burocracia, sem contrato mínimo. Você começa quando quiser.</p>
+      <div class="cta-btns">
+        <a href="https://wa.me/5519999999999" target="_blank" rel="noopener" class="btn btn-white">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12 19.79 19.79 0 01.91 3.18 2 2 0 012.88 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.69a16 16 0 006.29 6.29l1.05-1.05a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          Chamar no WhatsApp
+        </a>
+        <a href="#faq" class="btn btn-ghost-white">Ver perguntas frequentes</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div><div class="footer-logo">Despachou<span>.</span></div><div class="footer-tag">Prep center em Campinas, SP</div></div>
+      <nav class="footer-links" aria-label="Links do rodapé">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#precos">Preços</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="footer-copy">© 2026 Despachou. Todos os direitos reservados.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-btn').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>
+</body>
+</html>
